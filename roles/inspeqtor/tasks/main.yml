@@ -21,12 +21,6 @@
 - name: setup our monitoring routines for apache
   template: src=roles/inspeqtor/files/apache.inq dest=/etc/inspeqtor/services.d/apache.inq
 
-  # - uri:
-  #     url: https://your.form.based.auth.example.com/dashboard.php
-  #     method: GET
-  #     return_content: yes
-  #     HEADER_Cookie: "{{login.set_cookie}}"
-    
 - name: configure inspeqtor iself
   template: src=roles/inspeqtor/files/inspeqtor.conf dest=/etc/inspeqtor/inspeqtor.conf
   

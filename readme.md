@@ -4,4 +4,4 @@ See my blog post at http://fuzzygroup.github.io/blog/ for more.
 
 Run all this with:
 
-    ansible-playbook -i inventories/ficrawler11 playbooks/playbook_inspeqtor.yml
+     ansible-playbook -i inventories/ficrawler11 playbook_inspeqtor.yml
