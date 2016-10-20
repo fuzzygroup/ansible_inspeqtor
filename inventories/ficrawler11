@@ -1,2 +1,2 @@
 [crawler]
-ficrawler11   ansible_ssh_host=ec2-52-37-84-157.us-west-2.compute.amazonaws.com        ansible_ssh_private_key_file=/Users/sjohnson/.ssh/fi_nav_sitecrawl.pem
+ficrawler11   ansible_ssh_host=ec2-52-37-84-157.us-west-2.compute.amazonaws.com        ansible_ssh_private_key_file=/Users/sjohnson/.ssh/fi_nav_sitecrawl.pem ssh_name=ficrawler11
