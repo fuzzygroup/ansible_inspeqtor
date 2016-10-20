@@ -1,0 +1,13 @@
+# #- name: pull instance_id into a variable
+# - uri:
+#   url: http://169.254.169.254/latest/meta-data/instance-id
+#   method: GET
+#   return_content: yes
+#   register: instance_id
+#   debug: msg="instance_id is {{ instance_id }}"
+#
+
+---
+- action: uri url="http://169.254.169.254/latest/meta-data/instance-id" return_content=yes
+  register: instance_id
+  #debug: msg="instance_id is {{ instance_id }}"

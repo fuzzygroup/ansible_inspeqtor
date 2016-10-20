@@ -1,0 +1,3 @@
+check service sidekiq
+  if memory:rss > {{ sidekiq_memory_limit }} then alert, restart
+  if cpu:user > 95% for 2 cycles then alert

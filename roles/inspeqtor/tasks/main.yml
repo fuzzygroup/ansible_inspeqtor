@@ -1,0 +1,35 @@
+- name: prevent inspeqtor shell command from running if it has already been done
+  stat: path=/etc/apt/sources.list.d/contribsys_inspeqtor.list
+  register: inspeqtor_shell_installed
+  
+- name: install inspeqtor into shell
+  shell: curl -L https://bit.ly/InspeqtorDEB | sudo bash
+  when: inspeqtor_shell_installed.stat.exists == False
+  
+- name: apt install inspeqtor
+  apt: pkg=inspeqtor state=present
+  
+- name: add our user to the adm group so don't need to use sudo
+  user: name=ubuntu groups=ubuntu,adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev,docker append=yes
+  
+- name: setup our monitoring routines for host
+  template: src=roles/inspeqtor/files/host.inq dest=/etc/inspeqtor/host.inq
+
+- name: setup our monitoring routines for sidekiq
+  template: src=roles/inspeqtor/files/sidekiq.inq dest=/etc/inspeqtor/services.d/sidekiq.inq
+
+- name: setup our monitoring routines for apache
+  template: src=roles/inspeqtor/files/apache.inq dest=/etc/inspeqtor/services.d/apache.inq
+
+  # - uri:
+  #     url: https://your.form.based.auth.example.com/dashboard.php
+  #     method: GET
+  #     return_content: yes
+  #     HEADER_Cookie: "{{login.set_cookie}}"
+    
+- name: configure inspeqtor iself
+  template: src=roles/inspeqtor/files/inspeqtor.conf dest=/etc/inspeqtor/inspeqtor.conf
+  
+- name: restart inspeqtor
+  service: name=inspeqtor state=restarted  
+  

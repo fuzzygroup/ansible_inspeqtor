@@ -1,0 +1,3 @@
+check service apache
+  if memory:rss > {{ apache_memory_limit }} then alert, restart
+  if cpu:user > 95% for 2 cycles then alert
