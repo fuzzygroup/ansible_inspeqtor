@@ -1,6 +1,22 @@
+- name: stat apache.inq
+  stat: path=/etc/inspeqtor/services.d/apache.inq
+  register: apache_stat
+
+- name: delete apache.inq if it exists (allows it to NOT be installed if apache isn't on the machine)
+  command: rm /etc/inspeqtor/services.d/apache.inq
+  when: apache_stat.stat.exists
+
 - name: prevent inspeqtor shell command from running if it has already been done
   stat: path=/etc/apt/sources.list.d/contribsys_inspeqtor.list
   register: inspeqtor_shell_installed
+
+- name: prevent apache.inq file from being installed if apache isn't there
+  stat: path=/etc/apache2
+  register: inspeqtor_apache_installed
+
+# - name: prevent sidekiq shell command from running if sidekiq isn't there'
+#   stat: path=/etc/apt/sources.list.d/contribsys_inspeqtor.list
+#   register: inspeqtor_shell_installed
   
 - name: install inspeqtor into shell
   shell: curl -L https://bit.ly/InspeqtorDEB | sudo bash
@@ -20,6 +36,7 @@
 
 - name: setup our monitoring routines for apache
   template: src=roles/inspeqtor/files/apache.inq dest=/etc/inspeqtor/services.d/apache.inq
+  when: inspeqtor_apache_installed.stat.exists == True
 
 - name: configure inspeqtor iself
   template: src=roles/inspeqtor/files/inspeqtor.conf dest=/etc/inspeqtor/inspeqtor.conf
