@@ -1,3 +1,7 @@
+#
+# Delete legacy stuff from earlier install that didn't check existence
+#
+
 - name: stat apache.inq
   stat: path=/etc/inspeqtor/services.d/apache.inq
   register: apache_stat
@@ -13,10 +17,13 @@
 - name: prevent apache.inq file from being installed if apache isn't there
   stat: path=/etc/apache2
   register: inspeqtor_apache_installed
-
-# - name: prevent sidekiq shell command from running if sidekiq isn't there'
-#   stat: path=/etc/apt/sources.list.d/contribsys_inspeqtor.list
-#   register: inspeqtor_shell_installed
+  
+#
+# You'll need to customize this to where sidekiq exists on your system
+#
+- name: prevent sidekiq.inq from being installed if sidekiq isn't present
+  stat: path=/usr/local/rvm/gems/ruby-2.3.1/bin/sidekiq
+  register: inspeqtor_sidekiq_installed
   
 - name: install inspeqtor into shell
   shell: curl -L https://bit.ly/InspeqtorDEB | sudo bash
@@ -33,6 +40,7 @@
 
 - name: setup our monitoring routines for sidekiq
   template: src=roles/inspeqtor/files/sidekiq.inq dest=/etc/inspeqtor/services.d/sidekiq.inq
+  when: inspeqtor_sidekiq_installed.stat.exists == True
 
 - name: setup our monitoring routines for apache
   template: src=roles/inspeqtor/files/apache.inq dest=/etc/inspeqtor/services.d/apache.inq
